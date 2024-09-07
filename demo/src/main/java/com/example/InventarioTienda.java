@@ -86,12 +86,14 @@ public class InventarioTienda {
             System.out.print("Ingrese el ID del producto: ");
             int idConsultar = scanner.nextInt();
 
-            consultarDisponibilidad(productos, idConsultar);
+            String disponibilidad = consultarDisponibilidad(productos, idConsultar);
+            System.out.println(disponibilidad);  // Imprime el resultado de la consulta
             break;
 
             case 4:
             System.out.println("\n--- Listado de productos ---");
-            listarProductos(productos);
+            String listado = listarProductos(productos);
+            System.out.println(listado);  // Imprime el listado de productos
             break;
 
             case 5:
@@ -140,30 +142,35 @@ public class InventarioTienda {
         }
     }
 
-    public static void consultarDisponibilidad(Object[][] productos, int idProducto) {
+    public static String consultarDisponibilidad(Object[][] productos, int idProducto) {
+        String resultado = "Error, producto no encontrado";
         try {
             for(int i = 0; i < productos.length; i++) {
                 if (productos[i][0] != null && (int) productos[i][0] == idProducto) {
-                    System.out.println("Producto: " + productos[i][1] + "- cantidad disponible: " + productos[i][2]);
-                    return;
+                    resultado = "Producto: " + productos[i][1] + " - cantidad disponible: " + productos[i][2];
+                    return resultado;
                 }
             }
-            System.out.println("Error, prodcuto no encontrado");
         } catch (Exception e) {
-            System.out.println("Ocurrio un error al cosultar la diponibilidad: " + e.getMessage());
+            resultado = "Ocurrio un error al cosultar la diponibilidad: " + e.getMessage();
         }
+        return resultado;
     }
 
-    public static void listarProductos(Object[][] productos) {
+    public static String listarProductos(Object[][] productos) {
+        StringBuilder resultado = new StringBuilder();
         try {
             for (int i = 0; i < productos.length; i++) {
                 if (productos[i][0] != null) {
-                    System.out.println("ID: " + productos[i][0] + "| Nombre: " + productos[i][1] + " | Cantidad: " + productos[i][2]);
+                    resultado.append("ID: ").append(productos[i][0])
+                            .append(" | Nombre: ").append(productos[i][1])
+                            .append(" | Cantidad: ").append(productos[i][2]).append("\n");
                 }
             }
         } catch (Exception e) {
-            System.out.println("Ocurrio un error al listar productos: " + e.getMessage());
+            resultado.append("Ocurrió un error al listar productos: ").append(e.getMessage());
         }
+        return resultado.toString();
     }
 
     public static void inicializarProductos(Object[][] productos) {
